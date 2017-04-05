@@ -1,7 +1,7 @@
 class Api::V1::BantaclausesController < Api::V1::ApiBaseController
 
   def create
-    binding.pry
+    Bantaclauses::Create.new(params).perform
   end
 
 end

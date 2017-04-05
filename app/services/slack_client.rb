@@ -16,4 +16,12 @@ class SlackClient
     end
   end
 
+  def self.get_members(slack_team)
+    response = HttpRequest.new(url: 'https://slack.com/api/users.list',
+                method: :get,
+                data: { 'token' => slack_team.access_token } ).perform
+
+    binding.pry
+  end
+
 end

@@ -1,7 +1,7 @@
 class SlackAuthenticationsController < FrontendBaseController
 
   def show
-    scope = 'scope=commands,chat:write:bot'
+    scope = 'scope=commands,chat:write:bot,users:read'
     client_id = 'client_id=' + ENV['SLACK_ID']
     redirect_uri = 'redirect_uri=' + callback_slack_authentication_url
     query_string = [scope, client_id, redirect_uri].join('&')
