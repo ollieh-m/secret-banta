@@ -18,10 +18,28 @@ class SlackClient
 
   def self.get_members(slack_team)
     response = HttpRequest.new(url: 'https://slack.com/api/users.list',
-                method: :get,
+                method: :post,
                 data: { 'token' => slack_team.access_token } ).perform
 
-    binding.pry
+    if response[:status] == 200
+      array_of_users = response[:body]['members'].map do |member|
+        member.extract!('id', 'name')
+      end
+      {success: true, content: array_of_users}
+    else
+      {success: false, content: 'Could not get members'}
+    end
+  end
+
+  def self.send_messages(slack_team, array_of_users)
+    array_of_users.each do |user_with_recipient|
+      HttpRequest.new(url: 'https://slack.com/api/chat.postMessage',
+                      method: :post,
+                      data: { 'token' => slack_team.access_token,
+                              'channel' => "@#{user_with_recipient['name']}",
+                              'text' => "Give some banta to #{user_with_recipient['recipient']}" } ).perform
+
+    end
   end
 
 end
